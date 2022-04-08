@@ -73,17 +73,29 @@ def backwardStep():
         error_output.append(temp)
     print(f"Output errors: {error_output}")
 
+    '''
+    BELOW RE-WRITE NICELY
+    '''
+
     #   expected: -0.3071 & -0.2626
     for j in range(len(error_output)):
         temp = 0
         #   expected: -1.25552
-        temp = ((weights[2][0] * error_output[0]) + (weights[3][0] * error_output[1]))
+        temp = sigmoid[0] * ( 1 - sigmoid[0]) * ((weights[2][0] * error_output[0]) + (weights[3][0] * error_output[1]))
+    hidden_output.append(temp)
         #temp = ((0.7 * error_output[0]) + (0.9 * error_output[1]))
-    print(f"temp: {temp}")
-    print(weights[3][0])
+    #print(f"temp: {hidden_output}")
 
+    for k in range(len(error_output)):
+        temp = 0
+        #   expected: -1.25552
+        temp = sigmoid[1] * ( 1 - sigmoid[1]) * ((weights[2][1] * error_output[0]) + (weights[3][1] * error_output[1]))
+    hidden_output.append(temp)
+    print(f"Hidden errors: {hidden_output}")
 
-    #   weight update
+#   WEIGHT UPDATES
+def wUpdate():
+    pass
 
 #   training
 
