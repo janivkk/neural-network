@@ -57,8 +57,9 @@ def forwardStep(): #    slide 30 net4,5 o4,5
     print(f"o 4,5 + bias: {sigmoid}") #    works
 
     for neuron_weights in weights[2:]:
-        net = 0
+        net = 0 
         for s_weight, w in zip(sigmoid, neuron_weights):
+            #net += round((w * s_weight), 3)
             net += w * s_weight
         netarray.append(net)
     print(f"net 6,7 & o 6,7: {netarray}") # works
@@ -72,30 +73,15 @@ def backwardStep():
         error_output.append(temp)
     print(f"Output errors: {error_output}")
 
-    a = [i[0] for i in weights[2:]]
-
-    for i in range(len(error_output)):
+    #   expected: -0.3071 & -0.2626
+    for j in range(len(error_output)):
         temp = 0
-        for j in a:
-            #pass
-            temp += a[i > j] * error_output[i] 
-        print(temp)    
-        
-    #   hidden errors
-    for j in [i[0] for i in weights[2:]]:
-        temp = 0
-        tempArr = []
-        for k in range(len(error_output)):
-            temp += j * error_output[k]
-            tempArr.append(temp)
-    #print(f"temp: {tempArr}")
-        #   formula - e.g.,
-        #   o[i] * (1 - o[i]) * [(0.7 * 0.0244) + (0.9 * -1.414)]...
-        #print(f"Hidden layer: {hidden_output}")
+        #   expected: -1.25552
+        temp = ((weights[2][0] * error_output[0]) + (weights[3][0] * error_output[1]))
+        #temp = ((0.7 * error_output[0]) + (0.9 * error_output[1]))
+    print(f"temp: {temp}")
+    print(weights[3][0])
 
-    #print(f"weights: {weights[2::1]}")
-
-    #-1.25552
 
     #   weight update
 

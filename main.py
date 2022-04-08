@@ -23,7 +23,7 @@ output = []
 sigmoid = []
 netarray = []
 
-def hiddenlayer1():
+def forwardStep():
     #   sum function
     for neuron_weights in weights:
         net = 0
@@ -37,4 +37,4 @@ def hiddenlayer1():
         sigmoid.append(1 / (1 + (math.exp(-netarray[sigmoids]))))
     print(f"O [sigmoid]: {sigmoid}")
 
-hiddenlayer1()
+forwardStep()

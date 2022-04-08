@@ -1,2 +1,2 @@
-class NeuralNetwork:
+class Neural:
     pass
