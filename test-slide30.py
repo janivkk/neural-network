@@ -82,7 +82,7 @@ def backwardStep():
         temp = 0
         #   expected: -1.25552
         temp = sigmoid[0] * ( 1 - sigmoid[0]) * ((weights[2][0] * error_output[0]) + (weights[3][0] * error_output[1]))
-    hidden_output.append(temp)
+    error_output.append(temp)
         #temp = ((0.7 * error_output[0]) + (0.9 * error_output[1]))
     #print(f"temp: {hidden_output}")
 
@@ -90,12 +90,32 @@ def backwardStep():
         temp = 0
         #   expected: -1.25552
         temp = sigmoid[1] * ( 1 - sigmoid[1]) * ((weights[2][1] * error_output[0]) + (weights[3][1] * error_output[1]))
-    hidden_output.append(temp)
-    print(f"Hidden errors: {hidden_output}")
+    error_output.append(temp)
+    print(f"Hidden errors: {error_output}")
 
 #   WEIGHT UPDATES
-def wUpdate():
-    pass
+#   where learning rate is 0.1
+def weightsUpdate():
+    rate = 0.1
+
+    #   slightly works, output: -0.03071 [good]
+    #   delta weights
+    for i in range(len(error_output)):
+        for j in range(len(x)):
+            delta = 0
+            delta = rate * error_output[i] * x[j]
+        testarr.append(delta)
+    #print(testarr)
+
+    #   nope, failed
+    updatedarr = []
+    for old_weights in weights:
+        update_temp = 0
+        for replace_weights, new_weights in zip(old_weights, testarr):
+            update_temp = replace_weights + new_weights
+        updatedarr.append(update_temp)
+    print(updatedarr)
+
 
 #   training
 
@@ -106,5 +126,6 @@ def wUpdate():
 print("Forward Step:")
 forwardStep()
 print("Backward Step:")
-backwardStep()    
+backwardStep()   
+weightsUpdate() 
 

@@ -1,2 +1,0 @@
-class Neural:
-    pass
