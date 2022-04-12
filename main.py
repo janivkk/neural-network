@@ -1,4 +1,5 @@
 import math
+import neural_network
 
 '''
 //  Backpropagation algorithm
@@ -18,23 +19,3 @@ weights = [[0.74, 0.13, 0.68], [0.8, 0.4, 0.10], [0.35, 0.97, 0.96]]
 #   needs adding -> not working
 bias = [[0.9], [0.45], [0.36]]
 
-#   output
-output = []
-sigmoid = []
-netarray = []
-
-def forwardStep():
-    #   sum function
-    for neuron_weights in weights:
-        net = 0
-        for x_inputs, weight in zip(inputs, neuron_weights):
-            net += x_inputs * weight
-        netarray.append(net)
-    print(f"Net: {netarray}")
-
-    #   what does this do - exactly?
-    for sigmoids in range(len(netarray)):
-        sigmoid.append(1 / (1 + (math.exp(-netarray[sigmoids]))))
-    print(f"O [sigmoid]: {sigmoid}")
-
-forwardStep()

@@ -14,18 +14,23 @@ import math
 """
 
 class Network:
+    #   constructor [initialiser]
     def __init__(self):
         pass
 
-    def forwardStep():
+    #   forward step propagation
+    def forward():
         pass
 
-    def backwardStep():
+    #   backward step propagation
+    def back():
         pass
 
+    #   updating weights replacing old weights
     def update():
         pass
 
+    #   softmax function
     def softmax():
         pass
 

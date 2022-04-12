@@ -6,7 +6,9 @@ THIS FILE SAVED FOR IMPLEMENTATION OF ANN CLASS
 
 #   workshop task -> implement slide 30 with multiple weights
 
+from distutils.log import error
 import math
+import itertools
 
 #   inputs
 x = [0, 1, 1]
@@ -77,10 +79,8 @@ def backwardStep():
     BELOW RE-WRITE NICELY
     '''
 
-    #   expected: -0.3071 & -0.2626
     for j in range(len(error_output)):
         temp = 0
-        #   expected: -1.25552
         temp = sigmoid[0] * ( 1 - sigmoid[0]) * ((weights[2][0] * error_output[0]) + (weights[3][0] * error_output[1]))
     error_output.append(temp)
         #temp = ((0.7 * error_output[0]) + (0.9 * error_output[1]))
@@ -88,7 +88,6 @@ def backwardStep():
 
     for k in range(len(error_output)):
         temp = 0
-        #   expected: -1.25552
         temp = sigmoid[1] * ( 1 - sigmoid[1]) * ((weights[2][1] * error_output[0]) + (weights[3][1] * error_output[1]))
     error_output.append(temp)
     print(f"Hidden errors: {error_output}")
@@ -97,6 +96,15 @@ def backwardStep():
 #   where learning rate is 0.1
 def weightsUpdate():
     rate = 0.1
+
+    deltaArr = []
+    weightsArr = []
+
+    
+
+    for item in itertools.cycle(error_output):
+        #print(item)
+        pass
 
     #   slightly works, output: -0.03071 [good]
     #   delta weights
@@ -114,7 +122,7 @@ def weightsUpdate():
         for replace_weights, new_weights in zip(old_weights, testarr):
             update_temp = replace_weights + new_weights
         updatedarr.append(update_temp)
-    print(updatedarr)
+    #print(updatedarr)
 
 
 #   training
