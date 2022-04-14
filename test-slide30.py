@@ -6,10 +6,7 @@ THIS FILE SAVED FOR IMPLEMENTATION OF ANN CLASS
 
 #   workshop task -> implement slide 30 with multiple weights
 
-from distutils.log import error
 import math
-import itertools
-from re import A
 
 #   inputs
 x = [0, 1, 1]
@@ -65,7 +62,7 @@ def forwardStep(): #    slide 30 net4,5 o4,5
             #net += round((w * s_weight), 3)
             net += w * s_weight
         netarray.append(net)
-    #print(f"net 6,7 & o 6,7: {netarray}") # works
+    print(f"net 6,7 & o 6,7: {netarray}") # works
 
 def backwardStep():
     #   output errors
@@ -126,9 +123,7 @@ def backwardStep():
 
 #   output errors then hidden errors in layer 1
 
-print("Forward Step:")
 forwardStep()
-print("Backward Step:")
-backwardStep()   
-#weightsUpdate() 
+backwardStep()
+forwardStep()
 

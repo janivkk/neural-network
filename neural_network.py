@@ -16,23 +16,21 @@ import math
 class Network:
     #   constructor [initialiser]
     def __init__(self):
-        pass
+        self.input = []
+        self.weights = []
+        self.bias = []
 
     #   sigmoid function with return type
-    def sigmoid(net):
+    def sigmoid(self):
         #   return 1 / (1 + math.exp(-net))
         pass
 
     #   forward step propagation
-    def forward():
+    def forward(self):
         pass
 
-    #   backward step propagation
-    def back():
-        pass
-
-    #   updating weights replacing old weights
-    def update():
+    #   backward step propagation & update weights
+    def back(self):
         pass
 
     "   Softmax Function -> Softmax(Output)"
