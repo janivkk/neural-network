@@ -9,6 +9,7 @@ THIS FILE SAVED FOR IMPLEMENTATION OF ANN CLASS
 from distutils.log import error
 import math
 import itertools
+from re import A
 
 #   inputs
 x = [0, 1, 1]
@@ -49,14 +50,14 @@ def forwardStep(): #    slide 30 net4,5 o4,5
         for x_input, weight in zip(x, neuron_weights):
             net += x_input * weight
         netHiddenFirst.append(net)
-    print(f"net 4,5: {netHiddenFirst}") # works
+    #print(f"net 4,5: {netHiddenFirst}") # works
 
     #   sigmoid w/o activating the function or firing up a neuron
     for nets in range(len(netHiddenFirst)):
         sigmoid.append(1 / (1 + (math.exp(-netHiddenFirst[nets]))))
     #   adds bias to the sigmoid as per slide example
     sigmoid.insert(len(sigmoid), bias)
-    print(f"o 4,5 + bias: {sigmoid}") #    works
+    #print(f"o 4,5 + bias: {sigmoid}") #    works
 
     for neuron_weights in weights[2:]:
         net = 0 
@@ -64,7 +65,7 @@ def forwardStep(): #    slide 30 net4,5 o4,5
             #net += round((w * s_weight), 3)
             net += w * s_weight
         netarray.append(net)
-    print(f"net 6,7 & o 6,7: {netarray}") # works
+    #print(f"net 6,7 & o 6,7: {netarray}") # works
 
 def backwardStep():
     #   output errors
@@ -73,7 +74,7 @@ def backwardStep():
         temp = 0
         temp = desired_output[i] - netarray[i]
         error_output.append(temp)
-    print(f"Output errors: {error_output}")
+    #print(f"Output errors: {error_output}")
 
     '''
     BELOW RE-WRITE NICELY
@@ -90,40 +91,34 @@ def backwardStep():
         temp = 0
         temp = sigmoid[1] * ( 1 - sigmoid[1]) * ((weights[2][1] * error_output[0]) + (weights[3][1] * error_output[1]))
     error_output.append(temp)
-    print(f"Hidden errors: {error_output}")
+    #print(f"Hidden errors: {error_output}")
 
-#   WEIGHT UPDATES
-#   where learning rate is 0.1
-def weightsUpdate():
+    #   update weights
     rate = 0.1
 
-    deltaArr = []
-    weightsArr = []
+    #   nested lists or a list of lists
+    deltaArr = [[], [], [], []]
+    #weightsArr = [[], [], [], []]
 
-    
+    #   works
+    for i in range(len(x)):
+        deltaArr[0].append(rate * error_output[2] * x[i])
 
-    for item in itertools.cycle(error_output):
-        #print(item)
-        pass
+    for i in range(len(x)):
+        deltaArr[1].append(rate * error_output[3] * x[i])
 
-    #   slightly works, output: -0.03071 [good]
-    #   delta weights
-    for i in range(len(error_output)):
-        for j in range(len(x)):
-            delta = 0
-            delta = rate * error_output[i] * x[j]
-        testarr.append(delta)
-    #print(testarr)
+    for i in range(len(sigmoid)):
+        deltaArr[2].append(rate * error_output[0] * sigmoid[i])
 
-    #   nope, failed
-    updatedarr = []
-    for old_weights in weights:
-        update_temp = 0
-        for replace_weights, new_weights in zip(old_weights, testarr):
-            update_temp = replace_weights + new_weights
-        updatedarr.append(update_temp)
-    #print(updatedarr)
+    for i in range(len(sigmoid)):
+        deltaArr[3].append(rate * error_output[1] * sigmoid[i])
 
+    #   update weights
+    #   psuedo code: weights[i] + deltaArr[i]
+    #   works
+    newWeights = [[x + y for x, y in zip(subListA, subListB)] for subListA, subListB in zip(weights, deltaArr)]
+    "newWeights = [[sum(nums) for nums in zip(*subLst)] for subLst in zip(weights, deltaArr)]"
+    print(newWeights)
 
 #   training
 
@@ -135,5 +130,5 @@ print("Forward Step:")
 forwardStep()
 print("Backward Step:")
 backwardStep()   
-weightsUpdate() 
+#weightsUpdate() 
 

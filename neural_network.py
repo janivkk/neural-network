@@ -18,6 +18,11 @@ class Network:
     def __init__(self):
         pass
 
+    #   sigmoid function with return type
+    def sigmoid(net):
+        #   return 1 / (1 + math.exp(-net))
+        pass
+
     #   forward step propagation
     def forward():
         pass
@@ -30,7 +35,7 @@ class Network:
     def update():
         pass
 
-    #   softmax function
+    "   Softmax Function -> Softmax(Output)"
     def softmax():
         pass
 
