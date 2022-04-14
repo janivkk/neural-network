@@ -19,10 +19,11 @@ class Network:
         self.input = []
         self.weights = []
         self.bias = []
+        self.net = 2
 
     #   sigmoid function with return type
     def sigmoid(self):
-        #   return 1 / (1 + math.exp(-net))
+        return 1 / (1 + math.exp(-self.net))
         pass
 
     #   forward step propagation

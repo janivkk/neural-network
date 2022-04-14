@@ -1,5 +1,5 @@
 import math
-import neural_network
+import ann
 
 '''
 //  Backpropagation algorithm
@@ -18,4 +18,11 @@ weights = [[0.74, 0.13, 0.68], [0.8, 0.4, 0.10], [0.35, 0.97, 0.96]]
 
 #   needs adding -> not working
 bias = [[0.9], [0.45], [0.36]]
+
+" MAIN "
+
+_ann = ann.Network()
+
+
+
 
