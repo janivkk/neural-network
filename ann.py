@@ -15,25 +15,34 @@ import math
 
 class Network:
     #   initialiser [constructor]
-    def __init__(self, inputs, weights):
-        self.input = inputs
-        self.weights = weights
-        self.bias = []
+    def __init__(self, i, w, b):
+        self.input = i
+        self.weights = w
+        self.bias = b
         self.netArr = []
+        self.sigmoidArr = []
 
     #   sigmoid function with return type
-    def sigmoid(self):
-        return 1 / (1 + math.exp(-self.net))
+    def sigmoid(self, n):
+        return 1 / (1 + math.exp(-n))
 
     #   forward step propagation
     def forward(self):
+        #   add list to list -> input + bias
+        self.input.extend(self.bias)
+
         #   first
-        for neuron_weights in self.weights[:2]:
+        for neuron_weights in self.weights[:3]:
             net = 0
             for tempInput, tempWeight in zip(self.input, neuron_weights):
                 net += tempInput * tempWeight
-                self.netArr.append(net)
-        print(self.netArr)
+            self.netArr.append(net)
+        print(f"nets: {self.netArr}")
+
+        #   sigmoid function
+        for i in range(len(self.netArr)):
+            self.sigmoidArr.append(self.sigmoid(self.netArr[i]))
+        print(f"sigmoid: {self.sigmoidArr}")
 
     #   backward step propagation & update weights
     def back(self):
