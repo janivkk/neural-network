@@ -47,7 +47,7 @@ def forwardStep(): #    slide 30 net4,5 o4,5
         for x_input, weight in zip(x, neuron_weights):
             net += x_input * weight
         netHiddenFirst.append(net)
-    #print(f"net 4,5: {netHiddenFirst}") # works
+    print(f"net 4,5: {netHiddenFirst}") # works
 
     #   sigmoid w/o activating the function or firing up a neuron
     for nets in range(len(netHiddenFirst)):
