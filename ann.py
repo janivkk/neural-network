@@ -20,10 +20,13 @@ class Network:
         self.weights = w
         self.bias = b
         self.target = t
+        self.rate = 0.1 #   learning rate
         self.hiddenArr = []     #   hidden errors array
         self.netArr = []    #   first
         self.tempNetArr = []    #  second
         self.sigmoidArr = []    #   second
+        self.deltaArr = [[], [], [], [], []]  #   delta
+        self.updatedArr = [[], [], [], [], []]    #   updated weights Arr
 
     #   sigmoid function with return type
     def sigmoid(self, n):
@@ -40,14 +43,14 @@ class Network:
             for tempInput, tempWeight in zip(self.input, neuron_weights):
                 net += tempInput * tempWeight
             self.netArr.append(net)
-        print(f"nets 4, 5, 6: {self.netArr}")
+        #print(f"nets 4, 5, 6: {self.netArr}")
 
         #   second
         #   sigmoid function [activation function]
         for i in range(len(self.netArr)):
             self.sigmoidArr.append(self.sigmoid(self.netArr[i]))
         self.sigmoidArr.extend(self.bias)
-        print(f"sigmoid 7, 8: {self.sigmoidArr}")
+        #print(f"sigmoid 4, 5, 6 + bias: {self.sigmoidArr}")
 
         #   second
         for neuron_weights in self.weights[3:]:
@@ -55,7 +58,7 @@ class Network:
             for sWeight, tempWeight in zip(self.sigmoidArr, neuron_weights):
                 net += sWeight * tempWeight
             self.tempNetArr.append(net)
-        print(f"net 7, 8: {self.tempNetArr}")
+        #print(f"net 7, 8: {self.tempNetArr}")
 
         return self.tempNetArr
 
@@ -65,9 +68,48 @@ class Network:
         for i in range(len(self.target)):
             temp = self.target[i] - self.tempNetArr[i]
             self.hiddenArr.append(temp)
-        print(f"Output errors {self.hiddenArr}")
+        #print(f"Output errors: {self.hiddenArr}")
 
         #   hidden errors
+        tempA = self.sigmoidArr[0] * (1 - self.sigmoidArr[0]) * ((self.weights[3][0] * self.hiddenArr[0]) + (self.weights[4][0] * self.hiddenArr[1]))
+        self.hiddenArr.append(tempA)
+
+        tempB = self.sigmoidArr[1] * (1 - self.sigmoidArr[1]) * ((self.weights[3][1] * self.hiddenArr[0]) + (self.weights[4][1] * self.hiddenArr[1]))
+        self.hiddenArr.append(tempB)
+
+        tempC = self.sigmoidArr[2] * (1 - self.sigmoidArr[2]) * ((self.weights[3][2] * self.hiddenArr[0]) + (self.weights[4][2] * self.hiddenArr[1]))
+        self.hiddenArr.append(tempC)
+        #print(f"Hidden errors: {self.hiddenArr}")
+
+        #   delta weights [before update]
+        for j in range(len(self.input)):
+            self.deltaArr[0].append(self.rate * self.hiddenArr[2] * self.input[j])
+
+        for k in range(len(self.input)):
+            self.deltaArr[1].append(self.rate * self.hiddenArr[3] * self.input[k])
+
+        for l in range(len(self.input)):
+            self.deltaArr[2].append(self.rate * self.hiddenArr[4] * self.input[l])
+            
+        for m in range(len(self.sigmoidArr)):
+            self.deltaArr[3].append(self.rate * self.hiddenArr[0] * self.sigmoidArr[m])
+
+        for n in range(len(self.sigmoidArr)):
+            self.deltaArr[4].append(self.rate * self.hiddenArr[1] * self.sigmoidArr[n])
+
+        #   update weights
+        self.weights = [[x + y for x, y in zip(subLstA, subLstB)] for subLstA, subLstB in zip(self.weights, self.deltaArr)]
+
+        #   printing weights
+        print("Delta")
+        for x in self.deltaArr:
+            print(" ".join(map(str, x)))
+
+        print("Updated")
+        for x in self.weights:
+            print(" ".join(map(str, x)))
+
+        return self.weights
 
     #   Softmax Function -> Softmax(Output)
     def softmax():
