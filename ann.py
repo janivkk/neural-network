@@ -15,12 +15,15 @@ import math
 
 class Network:
     #   initialiser [constructor]
-    def __init__(self, i, w, b):
+    def __init__(self, i, w, b, t):
         self.input = i
         self.weights = w
         self.bias = b
-        self.netArr = []
-        self.sigmoidArr = []
+        self.target = t
+        self.hiddenArr = []     #   hidden errors array
+        self.netArr = []    #   first
+        self.tempNetArr = []    #  second
+        self.sigmoidArr = []    #   second
 
     #   sigmoid function with return type
     def sigmoid(self, n):
@@ -37,16 +40,34 @@ class Network:
             for tempInput, tempWeight in zip(self.input, neuron_weights):
                 net += tempInput * tempWeight
             self.netArr.append(net)
-        print(f"nets: {self.netArr}")
+        print(f"nets 4, 5, 6: {self.netArr}")
 
-        #   sigmoid function
+        #   second
+        #   sigmoid function [activation function]
         for i in range(len(self.netArr)):
             self.sigmoidArr.append(self.sigmoid(self.netArr[i]))
-        print(f"sigmoid: {self.sigmoidArr}")
+        self.sigmoidArr.extend(self.bias)
+        print(f"sigmoid 7, 8: {self.sigmoidArr}")
+
+        #   second
+        for neuron_weights in self.weights[3:]:
+            net = 0
+            for sWeight, tempWeight in zip(self.sigmoidArr, neuron_weights):
+                net += sWeight * tempWeight
+            self.tempNetArr.append(net)
+        print(f"net 7, 8: {self.tempNetArr}")
+
+        return self.tempNetArr
 
     #   backward step propagation & update weights
     def back(self):
-        pass
+        #   output errors -> calculating errors
+        for i in range(len(self.target)):
+            temp = self.target[i] - self.tempNetArr[i]
+            self.hiddenArr.append(temp)
+        print(f"Output errors {self.hiddenArr}")
+
+        #   hidden errors
 
     #   Softmax Function -> Softmax(Output)
     def softmax():
