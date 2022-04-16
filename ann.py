@@ -26,7 +26,7 @@ class Network:
         self.tempNetArr = []    #  second
         self.sigmoidArr = []    #   second
         self.deltaArr = [[], [], [], [], []]  #   delta
-        self.updatedArr = [[], [], [], [], []]    #   updated weights Arr
+        #self.updatedArr = [[], [], [], [], []]    #   updated weights Arr
 
     #   sigmoid function with return type
     def sigmoid(self, n):
@@ -101,11 +101,12 @@ class Network:
         self.weights = [[x + y for x, y in zip(subLstA, subLstB)] for subLstA, subLstB in zip(self.weights, self.deltaArr)]
 
         #   printing weights
+        """
         print("Delta")
         for x in self.deltaArr:
-            print(" ".join(map(str, x)))
+            print(" ".join(map(str, x))) 
+        """
 
-        print("Updated")
         for x in self.weights:
             print(" ".join(map(str, x)))
 

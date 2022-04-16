@@ -113,9 +113,8 @@ def backwardStep():
     #   update weights
     #   psuedo code: weights[i] + deltaArr[i]
     #   works
-    newWeights = [[x + y for x, y in zip(subListA, subListB)] for subListA, subListB in zip(weights, deltaArr)]
+    weights = [[x + y for x, y in zip(subListA, subListB)] for subListA, subListB in zip(weights, deltaArr)]
     "newWeights = [[sum(nums) for nums in zip(*subLst)] for subLst in zip(weights, deltaArr)]"
-    print(newWeights)
 
 #   training
 
