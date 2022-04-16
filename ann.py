@@ -26,7 +26,6 @@ class Network:
         self.tempNetArr = []    #  second
         self.sigmoidArr = []    #   second
         self.deltaArr = [[], [], [], [], []]  #   delta
-        #self.updatedArr = [[], [], [], [], []]    #   updated weights Arr
 
     #   sigmoid function with return type
     def sigmoid(self, n):
@@ -66,8 +65,8 @@ class Network:
     def back(self):
         #   output errors -> calculating errors
         for i in range(len(self.target)):
-            temp = self.target[i] - self.tempNetArr[i]
-            self.hiddenArr.append(temp)
+            #temp = self.target[i] - self.tempNetArr[i]
+            self.hiddenArr.append(self.target[i] - self.tempNetArr[i])
         #print(f"Output errors: {self.hiddenArr}")
 
         #   hidden errors

@@ -1,16 +1,8 @@
-'''
-SUBJECT TO CHANGE
-
-THIS FILE SAVED FOR IMPLEMENTATION OF ANN CLASS
-'''
-
-#   workshop task -> implement slide 30 with multiple weights
-
 import math
 
 #   inputs
 x = [0, 1, 1]
-bias = 1
+bias = [1]
 #   weights [2d]
 weights = [[0.5, -0.2, 0.5], [0.1, 0.2, 0.3], [0.7, 0.6, 0.2], [0.9, 0.8, 0.4]]
 
@@ -115,14 +107,3 @@ def backwardStep():
     #   works
     weights = [[x + y for x, y in zip(subListA, subListB)] for subListA, subListB in zip(weights, deltaArr)]
     "newWeights = [[sum(nums) for nums in zip(*subLst)] for subLst in zip(weights, deltaArr)]"
-
-#   training
-
-#   softmax function...?
-
-#   output errors then hidden errors in layer 1
-
-forwardStep()
-backwardStep()
-forwardStep()
-
