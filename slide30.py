@@ -6,10 +6,8 @@ TESTING
 import math
 
 class NetworkTest:
-    def __init__(self, i, w, b, t):
-        self.input = i
+    def __init__(self, w, t):
         self.weights = w
-        self.bias = b
         self.target = t
         self.rate = 0.1
         self.netArr = []
@@ -23,20 +21,20 @@ class NetworkTest:
     def sigmoid(self, n):
         return 1 / (1 + math.exp(-n))
 
-    def forward(self):
+    def forward(self, perceptron, bias):
         #   first
         for neuron_weights in self.weights[:2]:
             net = 0
-            for tempInput, tempWeight in zip(self.input, neuron_weights):
+            for tempInput, tempWeight in zip(perceptron, neuron_weights):
                 net += tempInput * tempWeight
             self.netArr.append(net)
-        print(self.netArr)
+        print(f"net 3, 4: {self.netArr}")
 
         #   activation function [sigmoid]
         for tempNet in range(len(self.netArr)):
             self.sigmoidArr.append(self.sigmoid(self.netArr[tempNet]))
-        self.sigmoidArr.extend(self.bias)
-        print(self.sigmoidArr)
+        self.sigmoidArr.extend(bias)
+        #print(self.sigmoidArr)
 
         #   second
         for neuron_weights in self.weights[2:]:
@@ -44,11 +42,17 @@ class NetworkTest:
             for tempWeight, weight in zip(self.sigmoidArr, neuron_weights):
                 net += tempWeight * weight
             self.netArr2.append(net)
-        print(self.netArr2)
+        #print(self.netArr2)
 
-    def backward(self):
+        self.netArr.clear()
+
+        return self.netArr2
+
+    def backward(self, perceptron):
         for i in range(len(self.target)):
             self.hiddenError.append(self.target[i] - self.netArr2[i])
+
+        self.netArr2.clear()
 
         tempA = self.sigmoidArr[0] * ( 1 - self.sigmoidArr[0]) * ((self.weights[2][0] * self.hiddenError[0]) + (self.weights[3][0] * self.hiddenError[1]))
         self.hiddenError.append(tempA)
@@ -56,13 +60,13 @@ class NetworkTest:
 
         tempB = self.sigmoidArr[1] * ( 1 - self.sigmoidArr[1]) * ((self.weights[2][1] * self.hiddenError[0]) + (self.weights[3][1] * self.hiddenError[1]))
         self.hiddenError.append(tempB)
-        #print(f"Hidden errors: {self.hiddenError}")    
+        #print(f"Hidden errors: {self.hiddenError}")   
 
-        for i in range(len(self.input)):
-            self.deltaArr[0].append(self.rate * self.hiddenError[2] * self.input[i])
+        for i in range(len(perceptron)):
+            self.deltaArr[0].append(self.rate * self.hiddenError[2] * perceptron[i])
 
-        for i in range(len(self.input)):
-            self.deltaArr[1].append(self.rate * self.hiddenError[3] * self.input[i])
+        for i in range(len(perceptron)):
+            self.deltaArr[1].append(self.rate * self.hiddenError[3] * perceptron[i])
 
         for i in range(len(self.sigmoidArr)):
             self.deltaArr[2].append(self.rate * self.hiddenError[0] * self.sigmoidArr[i])
@@ -71,6 +75,8 @@ class NetworkTest:
             self.deltaArr[3].append(self.rate * self.hiddenError[1] * self.sigmoidArr[i])
         #print(self.deltaArr)
 
+        self.sigmoidArr.clear()
+
         #   update weights
         #   psuedo code: weights[i] + deltaArr[i]
         #   works
@@ -78,8 +84,8 @@ class NetworkTest:
 
         #print(self.weights)
         
-        #for x in self.weights:
-            #print(" ".join(map(str, x)))
+        for x in self.weights:
+            print(" ".join(map(str, x)))
 
         return self.weights
 
@@ -90,7 +96,7 @@ class NetworkTest:
         print(self.softmaxArr)
 
     def training(self):
-        for neuron_weights in self.weights:
+        for neuron_weights in self.weights[2:]:
             temp = 0
             for out, weight in zip(self.target, neuron_weights):
                 temp += out * weight
@@ -98,7 +104,7 @@ class NetworkTest:
         print(self.outputArr)
 
 #   inputs
-x = [0, 1, 1]
+inputs = [0, 1, 1]
 bias = [1]
 #   weights [2d]
 weights = [[0.5, -0.2, 0.5], [0.1, 0.2, 0.3], [0.7, 0.6, 0.2], [0.9, 0.8, 0.4]]
@@ -115,18 +121,21 @@ desired_output = [1, 0]
 #backwardStep()
 #forwardStep()
 
-network = NetworkTest(x, weights, bias, desired_output)
-network.forward()
-network.backward()
-network.forward()
+network = NetworkTest(weights, desired_output)
+#network.forward()
+#network.backward()
 #network.training()
 
-"""
-for i in range(1):
-    network.backward()
-    network.forward()
-    #network.backward()
-    network.training()
-"""
+for i in range(5):
+    pass
+
+#network.forward(inputs, bias)
+
+for i in range(10):
+    print(i)
+    network.forward(inputs, bias)
+    network.backward(inputs)
+#network.training()
+
 
 

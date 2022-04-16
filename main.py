@@ -26,12 +26,12 @@ netArr = []
 " MAIN "
 
 _ann = ann.Network(inputs, weights, bias, target)
-_ann.forward()
+#_ann.forward()
 #_ann.back()
 
-for i in range(10):
-    print(f"Epoch: {i}")
-    #_ann.forward()
+for i in range(5):
+    print(f"Step: {i}")
+    _ann.forward()
     _ann.back()
 
 
