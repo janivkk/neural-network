@@ -28,6 +28,14 @@ class NetworkTest:
 
         return self.softmaxArr
 
+    def squareEr(self, target, output, errorArr):
+        if len(target) == len(output):
+            for index in range(len(target)):
+                errorArr.append(pow((target[index] - output[index]), 2))
+        else:
+            print(" ? ")
+        print(errorArr)
+
     def forward(self, perceptron, bias):
         #   first
         for neuron_weights in self.weights[:2]:
@@ -124,6 +132,8 @@ desired_output = [1, 0]
 #   output
 output = []
 
+squared_error = []
+
 network = NetworkTest(weights, desired_output, output)
 
 for j in range(100):
@@ -132,10 +142,12 @@ for j in range(100):
         print(f"Step: {i}")
         network.forward(inputs, bias)
         network.backward(inputs)
-#network.training()
+        #network.squareEr(desired_output, output, squared_error)
 
 network.forward(inputsUnseen, bias) #   expected: 1.055, 0.0347 for 6 & 7 [DONE!]
 
-network.softmax(output) #?
+network.softmax(output) #   expected: 0.735 & 0.265
+
+network.squareEr(desired_output, output, squared_error)
 
 

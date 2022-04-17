@@ -5,15 +5,16 @@
 //  -> No in-built libraries
 '''
 " LIBRARIES "
-import ann
+import mlp_network
 
 " MAIN "
-#   x1, x2, x3 == y1 [datasets]
-inputs = [[0.50, 1.00, 0.75], [1.00, 0.50, 0.75], [1.00, 1.00, 1.00]]
-test = [1.00, 1.00, 1.00]
+#   neuron inputs
+inputs = [[0.50, 1.00, 0.75], [1.00, 0.50, 0.75], [1.00, 1.00, 1.00], [-0.01, 0.50, 0.25], [0.50, -0.25, 0.13], [0.01, 0.02, 0.05]]
 
-#   y1
-target = [1, 0]
+unseen = [0.3, 0.7, 0.9]
+
+#   y1 & y2
+target = [[1, 0], [0, 1]]
 
 #   empty output
 output = []
@@ -23,26 +24,33 @@ weights = [[0.74, 0.8, 0.35, 0.9], [0.13, 0.4, 0.97, 0.45], [0.68, 0.10, 0.96, 0
 
 bias = [1]
 
-network = ann.Network(weights, target, output)
+network = mlp_network.MLP_Network(weights, output)
 
 #   work on it
+#network.forward(inputs[0], bias)
+#network.back(inputs[0], target[0])
+#network.squareEr(target[0], output)
+
 def run():
+    print("Backpropagation Algorithm (ID: 25085325) => Neural Networks")
+
     #   Epoch
     for i in range(10):
-        print(f"\nEpoch: {i} || Target: {target}")
+        print(f"\nEpoch: {i} || Target: {target[0]}")
 
         #   Steps
         for j in range(10):
             print(f"\nStep: {j}") 
             network.forward(inputs[0], bias)
-            network.back(inputs[0])
+            network.back(inputs[0], target[0])
         
         for k in range(10):
             print(f"\nStep: {k}")
             network.forward(inputs[1], bias)
-            network.back(inputs[1])
+            network.back(inputs[1], target[0])
 
-    network.forward(test, bias)
+    print("Probability Distribution [Y] of 0.3, 0.7 & 0.9")
+    network.forward(unseen, bias)
 
     network.softmax(output)
 

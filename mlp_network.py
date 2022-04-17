@@ -1,4 +1,4 @@
-""" LIBRARIES """
+" LIBRARIES "
 import math
 
 """ 
@@ -13,13 +13,12 @@ import math
 
 """
 
-class Network:
+class MLP_Network:
     #   initialiser [constructor]
-    def __init__(self, w, t, o):
+    def __init__(self, w, o):
         self.weights = w
-        self.target = t
         self.output = o     #   second
-        self.rate = 0.1     #   learning rate
+        self.lr = 0.1     #   learning rate
         self.hiddenArr = []     #   hidden errors array
         self.netArr = []    #   first 
         self.sigmoidArr = []    #   second
@@ -30,21 +29,27 @@ class Network:
         return 1 / (1 + math.exp(-n))
 
     #   Softmax Function -> Softmax(Output)
-    def softmax(self, output):  #   net
+    def softmax(self, output):
         for index in range(len(output)):
             self.softmaxArr.append(math.exp(output[index]) / (math.exp(output[0]) + math.exp(output[1])))
 
         print(f"Probaility Distribution: {self.softmaxArr}")
 
-        return self.softmaxArr        
+        return self.softmaxArr
+
+    #   calculate mean square error
+    def squareEr(self, target, output):
+        pass        
+
+    #   The Algorithm
 
     #   forward step propagation
-    def forward(self, perceptron, bias):
+    def forward(self, perceptron, bias = [1]):
         #   add list to list -> input + bias
         perceptron.extend(bias)
 
         #   show old weights
-        print("\nOLD:")
+        print("\nOLD [BIAS 'END']:")
         for index in self.weights:
             print(" ".join(map(str, index)))
 
@@ -56,11 +61,11 @@ class Network:
             self.netArr.append(net)
         print(f"\n[A4, A5, A6]: {self.netArr}")
 
-        #   second
-        #   sigmoid function [activation function]
+        #   second => sigmoid function [activation function]
         for i in range(len(self.netArr)):
             self.sigmoidArr.append(self.sigmoid(self.netArr[i]))
-        print(f"SIGMOID [A4, A5, A6]: {self.sigmoidArr}")
+        self.sigmoidArr.extend(bias)
+        print(f"SIGMOID => [A4, A5, A6]: {self.sigmoidArr}")
 
         #   second
         for neuron_weights in self.weights[3:]:
@@ -68,20 +73,20 @@ class Network:
             for sWeight, tempWeight in zip(self.sigmoidArr, neuron_weights):
                 net += sWeight * tempWeight
             self.output.append(net)
-        print(f"Output [A7, A8]: {self.output}")
+        print(f"[A7, A8]: {self.output}")
 
         self.netArr.clear()
 
         return self.output
 
     #   backward step propagation & update weights
-    def back(self, perceptron):
+    def back(self, perceptron, target):
         deltaArr = [[], [], [], [], []]  #  delta arr
 
         #   output errors -> calculating errors
-        for i in range(len(self.target)):
-            self.hiddenArr.append(self.target[i] - self.output[i])
-        print(f"Output errors: {self.hiddenArr}")
+        for i in range(len(self.output)):
+            self.hiddenArr.append(target[i] - self.output[i])
+        print(f"OUTPUT ERRORS: {self.hiddenArr}")
 
         self.output.clear()
 
@@ -91,23 +96,23 @@ class Network:
         self.hiddenArr.append(self.sigmoidArr[1] * (1 - self.sigmoidArr[1]) * ((self.weights[3][1] * self.hiddenArr[0]) + (self.weights[4][1] * self.hiddenArr[1])))
 
         self.hiddenArr.append(self.sigmoidArr[2] * (1 - self.sigmoidArr[2]) * ((self.weights[3][2] * self.hiddenArr[0]) + (self.weights[4][2] * self.hiddenArr[1])))
-        print(f"Hidden errors: {self.hiddenArr}")
+        print(f"HIDDEN ERRORS: {self.hiddenArr}")
 
         #   delta weights [before update]
         for j in range(len(perceptron)):
-            deltaArr[0].append(self.rate * self.hiddenArr[2] * perceptron[j])
+            deltaArr[0].append(self.lr * self.hiddenArr[2] * perceptron[j])
 
         for k in range(len(perceptron)):
-            deltaArr[1].append(self.rate * self.hiddenArr[3] * perceptron[k])
+            deltaArr[1].append(self.lr * self.hiddenArr[3] * perceptron[k])
 
         for l in range(len(perceptron)):
-            deltaArr[2].append(self.rate * self.hiddenArr[4] * perceptron[l])
+            deltaArr[2].append(self.lr * self.hiddenArr[4] * perceptron[l])
             
         for m in range(len(self.sigmoidArr)):
-            deltaArr[3].append(self.rate * self.hiddenArr[0] * self.sigmoidArr[m])
+            deltaArr[3].append(self.lr * self.hiddenArr[0] * self.sigmoidArr[m])
 
         for n in range(len(self.sigmoidArr)):
-            deltaArr[4].append(self.rate * self.hiddenArr[1] * self.sigmoidArr[n])
+            deltaArr[4].append(self.lr * self.hiddenArr[1] * self.sigmoidArr[n])
 
         self.sigmoidArr.clear()
         self.hiddenArr.clear()
@@ -118,7 +123,7 @@ class Network:
         deltaArr.clear()
 
         #   printing updated weights
-        print("\nNEW:")
+        print("\nNEW [BIAS 'END']:")
         for x in self.weights:
             print(" ".join(map(str, x)))
 
