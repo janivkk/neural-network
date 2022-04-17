@@ -12,7 +12,7 @@ class NetworkTest:
         self.rate = 0.1
         self.netArr = []
         self.output = o
-        self.netArr2 = []
+        #self.netArr2 = []
         self.sigmoidArr = []
         self.hiddenError = []
         self.outputArr = []
@@ -49,20 +49,20 @@ class NetworkTest:
             net = 0
             for tempWeight, weight in zip(self.sigmoidArr, neuron_weights):
                 net += tempWeight * weight
-            self.netArr2.append(net)
-        print(f"Net 6, 7: {self.netArr2}\n")
+            self.output.append(net)
+        print(f"Net 6, 7: {self.output}\n")
 
         self.netArr.clear()
 
-        return self.netArr2
+        return self.output
 
     def backward(self, perceptron):
         deltaArr = [[], [], [], []]
 
-        for i in range(len(self.netArr2)):
-            self.hiddenError.append(self.target[i] - self.netArr2[i])
+        for i in range(len(self.output)):
+            self.hiddenError.append(self.target[i] - self.output[i])
 
-        self.netArr2.clear()
+        self.output.clear()
 
         tempA = self.sigmoidArr[0] * ( 1 - self.sigmoidArr[0]) * ((self.weights[2][0] * self.hiddenError[0]) + (self.weights[3][0] * self.hiddenError[1]))
         self.hiddenError.append(tempA)
@@ -131,6 +131,6 @@ for j in range(100):
 
 network.forward(inputsUnseen, bias) #   expected: 1.055, 0.0347 for 6 & 7 [DONE!]
 
-network.softmax() #?
+network.softmax(output) #?
 
 
