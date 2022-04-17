@@ -4,7 +4,7 @@ TESTING
 #   workshop task -> implement slide 30 with multiple weights
 
 import math
-import matplotlib
+import matplotlib as plt
 
 class NetworkTest:
     def __init__(self, w, t, o):
@@ -100,6 +100,17 @@ class NetworkTest:
             print(" ".join(map(str, x)))
 
         return self.weights
+
+    def plotLearningCurve(self, fileName):
+        x_data = []
+        y_data = []
+        x_data.extend([self.logged_error[i][0] for i in range(0, len(self.logged_error))])
+        y_data.extend([self.logged_error[i][1] for i in range(0, len(self.logged_error))])
+        fig, ax = plt.subplots()
+        fig.suptitle(fileName)
+        ax.set(xlabel = 'Epoch', ylabel = 'Squared Error')
+        ax.plot(x_data, y_data, 'tab:green')
+        plt.show()
 
     def training(self):
         pass
