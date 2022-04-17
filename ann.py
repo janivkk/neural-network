@@ -29,6 +29,7 @@ class Network:
     def sigmoid(self, n):
         return 1 / (1 + math.exp(-n))
 
+    #   Softmax Function -> Softmax(Output)
     def softmax(self, output):  #   net
         for index in range(len(output)):
             self.softmaxArr.append(math.exp(output[index]) / (math.exp(output[0]) + math.exp(output[1])))
@@ -42,13 +43,18 @@ class Network:
         #   add list to list -> input + bias
         perceptron.extend(bias)
 
+        #   show old weights
+        print("\nOLD:")
+        for index in self.weights:
+            print(" ".join(map(str, index)))
+
         #   first
         for neuron_weights in self.weights[:3]:
             net = 0
             for tempInput, tempWeight in zip(perceptron, neuron_weights):
                 net += tempInput * tempWeight
             self.netArr.append(net)
-        print(f"[A4, A5, A6]: {self.netArr}")
+        print(f"\n[A4, A5, A6]: {self.netArr}")
 
         #   second
         #   sigmoid function [activation function]
@@ -62,7 +68,7 @@ class Network:
             for sWeight, tempWeight in zip(self.sigmoidArr, neuron_weights):
                 net += sWeight * tempWeight
             self.output.append(net)
-        print(f"[A7, A8]: {self.output}")
+        print(f"Output [A7, A8]: {self.output}")
 
         self.netArr.clear()
 
@@ -106,10 +112,6 @@ class Network:
         self.sigmoidArr.clear()
         self.hiddenArr.clear()
 
-        print("\nOLD:")
-        for x in self.weights:
-            print(" ".join(map(str, x)))
-
         #   update weights
         self.weights = [[x + y for x, y in zip(subLstA, subLstB)] for subLstA, subLstB in zip(self.weights, deltaArr)]
 
@@ -122,9 +124,4 @@ class Network:
 
         return self.weights
 
-    #   Softmax Function -> Softmax(Output)
-    def softmax():
-        pass
-
-    def training():
-        pass
+#   END
