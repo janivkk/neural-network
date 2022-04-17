@@ -6,11 +6,12 @@ TESTING
 import math
 
 class NetworkTest:
-    def __init__(self, w, t):
+    def __init__(self, w, t, o):
         self.weights = w
         self.target = t
         self.rate = 0.1
         self.netArr = []
+        self.output = o
         self.netArr2 = []
         self.sigmoidArr = []
         self.hiddenError = []
@@ -20,9 +21,13 @@ class NetworkTest:
     def sigmoid(self, n):
         return 1 / (1 + math.exp(-n))
 
-    def squarederror(self, target, output):
-        for index in range(len(target)):
-            pass
+    def softmax(self, output):  #   net
+        for index in range(len(output)):
+            self.softmaxArr.append(math.exp(output[index]) / (math.exp(output[0]) + math.exp(output[1])))
+
+        print(f"Softmax Function: {self.softmaxArr}")
+
+        return self.softmaxArr
 
     def forward(self, perceptron, bias):
         #   first
@@ -31,13 +36,13 @@ class NetworkTest:
             for tempInput, tempWeight in zip(perceptron, neuron_weights):
                 net += tempInput * tempWeight
             self.netArr.append(net)
-        #print(f"Net 3, 4: {self.netArr} \n")
+        #print(f"Net 4, 5: {self.netArr} \n")
 
         #   activation function [sigmoid]
         for tempNet in range(len(self.netArr)):
             self.sigmoidArr.append(self.sigmoid(self.netArr[tempNet]))
         self.sigmoidArr.extend(bias)
-        #print(f"Sigmoid 3, 4: {self.sigmoidArr} \n")
+        #print(f"Sigmoid 4, 5: {self.sigmoidArr} \n")
 
         #   second
         for neuron_weights in self.weights[2:]:
@@ -45,7 +50,7 @@ class NetworkTest:
             for tempWeight, weight in zip(self.sigmoidArr, neuron_weights):
                 net += tempWeight * weight
             self.netArr2.append(net)
-        #print(f"Net 5, 6: {self.netArr2}\n")
+        print(f"Net 6, 7: {self.netArr2}\n")
 
         self.netArr.clear()
 
@@ -84,24 +89,15 @@ class NetworkTest:
         self.hiddenError.clear()
 
         #   update weights
-        #   psuedo code: weights[i] + deltaArr[i]
         #   works
         self.weights = [[x + y for x, y in zip(subListA, subListB)] for subListA, subListB in zip(self.weights, deltaArr)]
 
         deltaArr.clear()
-
-        #print(self.weights)
         
         for x in self.weights:
             print(" ".join(map(str, x)))
 
         return self.weights
-
-    def softmax(self, o):
-        for i in range(len(o)):
-            _sum = math.exp(o[i]) / (math.exp(o[i] + math.exp(o[i])))
-            self.softmaxArr.append(_sum)
-        print(self.softmaxArr)
 
     def training(self):
         for neuron_weights in self.weights[2:]:
@@ -120,14 +116,21 @@ bias = [1]
 weights = [[0.5, -0.2, 0.5], [0.1, 0.2, 0.3], [0.7, 0.6, 0.2], [0.9, 0.8, 0.4]]
 #   desired output
 desired_output = [1, 0]
+#   output
+output = []
 
-network = NetworkTest(weights, desired_output)
+network = NetworkTest(weights, desired_output, output)
 
-for i in range(10):
-    print(f"Step: {i}")
-    network.forward(inputs, bias)
-    network.backward(inputs)
+for j in range(100):
+    print(f"Epoch: {j}")
+    for i in range(100):
+        print(f"Step: {i}")
+        network.forward(inputs, bias)
+        network.backward(inputs)
 #network.training()
 
+network.forward(inputsUnseen, bias) #   expected: 1.055, 0.0347 for 6 & 7 [DONE!]
+
+network.softmax() #?
 
 

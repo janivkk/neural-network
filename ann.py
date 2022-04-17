@@ -39,14 +39,13 @@ class Network:
             for tempInput, tempWeight in zip(perceptron, neuron_weights):
                 net += tempInput * tempWeight
             self.netArr.append(net)
-        #print(f"nets 4, 5, 6: {self.netArr}")
+        print(f"[A4, A5, A6]: {self.netArr}")
 
         #   second
         #   sigmoid function [activation function]
         for i in range(len(self.netArr)):
             self.sigmoidArr.append(self.sigmoid(self.netArr[i]))
-        self.sigmoidArr.extend(bias)
-        #print(f"sigmoid 4, 5, 6 + bias: {self.sigmoidArr}")
+        print(f"SIGMOID [A4, A5, A6]: {self.sigmoidArr}")
 
         #   second
         for neuron_weights in self.weights[3:]:
@@ -54,7 +53,7 @@ class Network:
             for sWeight, tempWeight in zip(self.sigmoidArr, neuron_weights):
                 net += sWeight * tempWeight
             self.tempNetArr.append(net)
-        #print(f"net 7, 8: {self.tempNetArr}")
+        print(f"[A7, A8]: {self.tempNetArr}")
 
         self.netArr.clear()
 
@@ -66,22 +65,18 @@ class Network:
 
         #   output errors -> calculating errors
         for i in range(len(self.target)):
-            #temp = self.target[i] - self.tempNetArr[i]
             self.hiddenArr.append(self.target[i] - self.tempNetArr[i])
-        #print(f"Output errors: {self.hiddenArr}")
+        print(f"Output errors: {self.hiddenArr}")
 
         self.tempNetArr.clear()
 
         #   hidden errors
-        tempA = self.sigmoidArr[0] * (1 - self.sigmoidArr[0]) * ((self.weights[3][0] * self.hiddenArr[0]) + (self.weights[4][0] * self.hiddenArr[1]))
-        self.hiddenArr.append(tempA)
+        self.hiddenArr.append(self.sigmoidArr[0] * (1 - self.sigmoidArr[0]) * ((self.weights[3][0] * self.hiddenArr[0]) + (self.weights[4][0] * self.hiddenArr[1])))
 
-        tempB = self.sigmoidArr[1] * (1 - self.sigmoidArr[1]) * ((self.weights[3][1] * self.hiddenArr[0]) + (self.weights[4][1] * self.hiddenArr[1]))
-        self.hiddenArr.append(tempB)
+        self.hiddenArr.append(self.sigmoidArr[1] * (1 - self.sigmoidArr[1]) * ((self.weights[3][1] * self.hiddenArr[0]) + (self.weights[4][1] * self.hiddenArr[1])))
 
-        tempC = self.sigmoidArr[2] * (1 - self.sigmoidArr[2]) * ((self.weights[3][2] * self.hiddenArr[0]) + (self.weights[4][2] * self.hiddenArr[1]))
-        self.hiddenArr.append(tempC)
-        #print(f"Hidden errors: {self.hiddenArr}")
+        self.hiddenArr.append(self.sigmoidArr[2] * (1 - self.sigmoidArr[2]) * ((self.weights[3][2] * self.hiddenArr[0]) + (self.weights[4][2] * self.hiddenArr[1])))
+        print(f"Hidden errors: {self.hiddenArr}")
 
         #   delta weights [before update]
         for j in range(len(perceptron)):
@@ -102,12 +97,17 @@ class Network:
         self.sigmoidArr.clear()
         self.hiddenArr.clear()
 
+        print("\nOLD:")
+        for x in self.weights:
+            print(" ".join(map(str, x)))
+
         #   update weights
         self.weights = [[x + y for x, y in zip(subLstA, subLstB)] for subLstA, subLstB in zip(self.weights, deltaArr)]
 
         deltaArr.clear()
 
         #   printing updated weights
+        print("\nNEW:")
         for x in self.weights:
             print(" ".join(map(str, x)))
 
