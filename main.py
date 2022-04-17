@@ -27,14 +27,17 @@ network = ann.Network(weights, target, output)
 
 #   work on it
 def run():
-    for i in range(1):
-        print(f"\nEpoch: {i}")
-        for j in range(5):
-            print(f"\nStep: {j}")
+    #   Epoch
+    for i in range(10):
+        print(f"\nEpoch: {i} || Target: {target}")
+
+        #   Steps
+        for j in range(10):
+            print(f"\nStep: {j}") 
             network.forward(inputs[0], bias)
             network.back(inputs[0])
-
-        for k in range(5):
+        
+        for k in range(10):
             print(f"\nStep: {k}")
             network.forward(inputs[1], bias)
             network.back(inputs[1])
