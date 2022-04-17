@@ -18,12 +18,12 @@ class Network:
     def __init__(self, w, t, o):
         self.weights = w
         self.target = t
-        self.rate = 0.1 #   learning rate
+        self.output = o     #   second
+        self.rate = 0.1     #   learning rate
         self.hiddenArr = []     #   hidden errors array
-        self.netArr = []    #   first
-        self.outputArr = o    #  second
+        self.netArr = []    #   first 
         self.sigmoidArr = []    #   second
-        self.softmaxArr = []
+        self.softmaxArr = []    #   softmax / probability distribution
 
     #   sigmoid function with return type
     def sigmoid(self, n):
@@ -61,12 +61,12 @@ class Network:
             net = 0
             for sWeight, tempWeight in zip(self.sigmoidArr, neuron_weights):
                 net += sWeight * tempWeight
-            self.outputArr.append(net)
-        print(f"[A7, A8]: {self.outputArr}")
+            self.output.append(net)
+        print(f"[A7, A8]: {self.output}")
 
         self.netArr.clear()
 
-        return self.outputArr
+        return self.output
 
     #   backward step propagation & update weights
     def back(self, perceptron):
@@ -74,10 +74,10 @@ class Network:
 
         #   output errors -> calculating errors
         for i in range(len(self.target)):
-            self.hiddenArr.append(self.target[i] - self.outputArr[i])
+            self.hiddenArr.append(self.target[i] - self.output[i])
         print(f"Output errors: {self.hiddenArr}")
 
-        self.outputArr.clear()
+        self.output.clear()
 
         #   hidden errors
         self.hiddenArr.append(self.sigmoidArr[0] * (1 - self.sigmoidArr[0]) * ((self.weights[3][0] * self.hiddenArr[0]) + (self.weights[4][0] * self.hiddenArr[1])))

@@ -15,7 +15,6 @@ class NetworkTest:
         self.netArr = []
         self.sigmoidArr = []
         self.hiddenError = []
-        #self.outputArr = []
         self.softmaxArr = []
 
     def sigmoid(self, n):
@@ -30,8 +29,6 @@ class NetworkTest:
         return self.softmaxArr
 
     def forward(self, perceptron, bias):
-        perceptron.extend(bias)
-
         #   first
         for neuron_weights in self.weights[:2]:
             net = 0
@@ -43,7 +40,7 @@ class NetworkTest:
         #   activation function [sigmoid]
         for tempNet in range(len(self.netArr)):
             self.sigmoidArr.append(self.sigmoid(self.netArr[tempNet]))
-        #self.sigmoidArr.extend(bias)
+        self.sigmoidArr.extend(bias)
         #print(f"Sigmoid 4, 5: {self.sigmoidArr} \n")
 
         #   second
