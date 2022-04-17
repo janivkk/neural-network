@@ -4,18 +4,18 @@ TESTING
 #   workshop task -> implement slide 30 with multiple weights
 
 import math
+import matplotlib
 
 class NetworkTest:
     def __init__(self, w, t, o):
         self.weights = w
         self.target = t
         self.rate = 0.1
-        self.netArr = []
         self.output = o
-        #self.netArr2 = []
+        self.netArr = []
         self.sigmoidArr = []
         self.hiddenError = []
-        self.outputArr = []
+        #self.outputArr = []
         self.softmaxArr = []
 
     def sigmoid(self, n):
@@ -25,11 +25,13 @@ class NetworkTest:
         for index in range(len(output)):
             self.softmaxArr.append(math.exp(output[index]) / (math.exp(output[0]) + math.exp(output[1])))
 
-        print(f"Softmax Function: {self.softmaxArr}")
+        print(f"Probaility Distribution: {self.softmaxArr}")
 
         return self.softmaxArr
 
     def forward(self, perceptron, bias):
+        perceptron.extend(bias)
+
         #   first
         for neuron_weights in self.weights[:2]:
             net = 0
@@ -41,7 +43,7 @@ class NetworkTest:
         #   activation function [sigmoid]
         for tempNet in range(len(self.netArr)):
             self.sigmoidArr.append(self.sigmoid(self.netArr[tempNet]))
-        self.sigmoidArr.extend(bias)
+        #self.sigmoidArr.extend(bias)
         #print(f"Sigmoid 4, 5: {self.sigmoidArr} \n")
 
         #   second
@@ -100,12 +102,7 @@ class NetworkTest:
         return self.weights
 
     def training(self):
-        for neuron_weights in self.weights[2:]:
-            temp = 0
-            for out, weight in zip(self.target, neuron_weights):
-                temp += out * weight
-            self.outputArr.append(temp)
-        print(self.outputArr)
+        pass
 
 #   inputs
 inputs = [0, 1, 1]

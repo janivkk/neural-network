@@ -15,18 +15,27 @@ import math
 
 class Network:
     #   initialiser [constructor]
-    def __init__(self, w, t):
+    def __init__(self, w, t, o):
         self.weights = w
         self.target = t
         self.rate = 0.1 #   learning rate
         self.hiddenArr = []     #   hidden errors array
         self.netArr = []    #   first
-        self.tempNetArr = []    #  second
+        self.outputArr = o    #  second
         self.sigmoidArr = []    #   second
+        self.softmaxArr = []
 
     #   sigmoid function with return type
     def sigmoid(self, n):
         return 1 / (1 + math.exp(-n))
+
+    def softmax(self, output):  #   net
+        for index in range(len(output)):
+            self.softmaxArr.append(math.exp(output[index]) / (math.exp(output[0]) + math.exp(output[1])))
+
+        print(f"Probaility Distribution: {self.softmaxArr}")
+
+        return self.softmaxArr        
 
     #   forward step propagation
     def forward(self, perceptron, bias):
@@ -52,12 +61,12 @@ class Network:
             net = 0
             for sWeight, tempWeight in zip(self.sigmoidArr, neuron_weights):
                 net += sWeight * tempWeight
-            self.tempNetArr.append(net)
-        print(f"[A7, A8]: {self.tempNetArr}")
+            self.outputArr.append(net)
+        print(f"[A7, A8]: {self.outputArr}")
 
         self.netArr.clear()
 
-        return self.tempNetArr
+        return self.outputArr
 
     #   backward step propagation & update weights
     def back(self, perceptron):
@@ -65,10 +74,10 @@ class Network:
 
         #   output errors -> calculating errors
         for i in range(len(self.target)):
-            self.hiddenArr.append(self.target[i] - self.tempNetArr[i])
+            self.hiddenArr.append(self.target[i] - self.outputArr[i])
         print(f"Output errors: {self.hiddenArr}")
 
-        self.tempNetArr.clear()
+        self.outputArr.clear()
 
         #   hidden errors
         self.hiddenArr.append(self.sigmoidArr[0] * (1 - self.sigmoidArr[0]) * ((self.weights[3][0] * self.hiddenArr[0]) + (self.weights[4][0] * self.hiddenArr[1])))
