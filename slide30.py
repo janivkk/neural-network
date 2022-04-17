@@ -20,6 +20,10 @@ class NetworkTest:
     def sigmoid(self, n):
         return 1 / (1 + math.exp(-n))
 
+    def squarederror(self, target, output):
+        for index in range(len(target)):
+            pass
+
     def forward(self, perceptron, bias):
         #   first
         for neuron_weights in self.weights[:2]:
@@ -41,7 +45,7 @@ class NetworkTest:
             for tempWeight, weight in zip(self.sigmoidArr, neuron_weights):
                 net += tempWeight * weight
             self.netArr2.append(net)
-        print(f"Net 5, 6: {self.netArr2} \n")
+        #print(f"Net 5, 6: {self.netArr2}\n")
 
         self.netArr.clear()
 
@@ -57,11 +61,11 @@ class NetworkTest:
 
         tempA = self.sigmoidArr[0] * ( 1 - self.sigmoidArr[0]) * ((self.weights[2][0] * self.hiddenError[0]) + (self.weights[3][0] * self.hiddenError[1]))
         self.hiddenError.append(tempA)
-        print(f"Output errors: {self.hiddenError} \n")
+        #print(f"Output errors: {self.hiddenError} \n")
 
         tempB = self.sigmoidArr[1] * ( 1 - self.sigmoidArr[1]) * ((self.weights[2][1] * self.hiddenError[0]) + (self.weights[3][1] * self.hiddenError[1]))
         self.hiddenError.append(tempB)
-        print(f"Hidden errors: {self.hiddenError} \n")   
+        #print(f"Hidden errors: {self.hiddenError} \n")   
 
         for i in range(len(perceptron)):
             deltaArr[0].append(self.rate * self.hiddenError[2] * perceptron[i])
@@ -109,6 +113,7 @@ class NetworkTest:
 
 #   inputs
 inputs = [0, 1, 1]
+inputsUnseen = [0.4, 0.7, 1]
 #   bias
 bias = [1]
 #   weights [2d]
@@ -116,21 +121,11 @@ weights = [[0.5, -0.2, 0.5], [0.1, 0.2, 0.3], [0.7, 0.6, 0.2], [0.9, 0.8, 0.4]]
 #   desired output
 desired_output = [1, 0]
 
-#forwardStep()
-#backwardStep()
-#forwardStep()
-
 network = NetworkTest(weights, desired_output)
-#network.forward()
-#network.backward()
-#network.training()
 
-#network.forward(inputs, bias)
-
-for i in range(2):
+for i in range(10):
     print(f"Step: {i}")
     network.forward(inputs, bias)
-    print("\n")
     network.backward(inputs)
 #network.training()
 
