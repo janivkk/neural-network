@@ -15,31 +15,28 @@ import math
 
 class Network:
     #   initialiser [constructor]
-    def __init__(self, i, w, b, t):
-        self.input = i
+    def __init__(self, w, t):
         self.weights = w
-        self.bias = b
         self.target = t
         self.rate = 0.1 #   learning rate
         self.hiddenArr = []     #   hidden errors array
         self.netArr = []    #   first
         self.tempNetArr = []    #  second
         self.sigmoidArr = []    #   second
-        self.deltaArr = [[], [], [], [], []]  #   delta
 
     #   sigmoid function with return type
     def sigmoid(self, n):
         return 1 / (1 + math.exp(-n))
 
     #   forward step propagation
-    def forward(self):
+    def forward(self, perceptron, bias):
         #   add list to list -> input + bias
-        self.input.extend(self.bias)
+        perceptron.extend(bias)
 
         #   first
         for neuron_weights in self.weights[:3]:
             net = 0
-            for tempInput, tempWeight in zip(self.input, neuron_weights):
+            for tempInput, tempWeight in zip(perceptron, neuron_weights):
                 net += tempInput * tempWeight
             self.netArr.append(net)
         #print(f"nets 4, 5, 6: {self.netArr}")
@@ -48,7 +45,7 @@ class Network:
         #   sigmoid function [activation function]
         for i in range(len(self.netArr)):
             self.sigmoidArr.append(self.sigmoid(self.netArr[i]))
-        self.sigmoidArr.extend(self.bias)
+        self.sigmoidArr.extend(bias)
         #print(f"sigmoid 4, 5, 6 + bias: {self.sigmoidArr}")
 
         #   second
@@ -59,15 +56,21 @@ class Network:
             self.tempNetArr.append(net)
         #print(f"net 7, 8: {self.tempNetArr}")
 
+        self.netArr.clear()
+
         return self.tempNetArr
 
     #   backward step propagation & update weights
-    def back(self):
+    def back(self, perceptron):
+        deltaArr = [[], [], [], [], []]  #  delta arr
+
         #   output errors -> calculating errors
         for i in range(len(self.target)):
             #temp = self.target[i] - self.tempNetArr[i]
             self.hiddenArr.append(self.target[i] - self.tempNetArr[i])
         #print(f"Output errors: {self.hiddenArr}")
+
+        self.tempNetArr.clear()
 
         #   hidden errors
         tempA = self.sigmoidArr[0] * (1 - self.sigmoidArr[0]) * ((self.weights[3][0] * self.hiddenArr[0]) + (self.weights[4][0] * self.hiddenArr[1]))
@@ -81,31 +84,30 @@ class Network:
         #print(f"Hidden errors: {self.hiddenArr}")
 
         #   delta weights [before update]
-        for j in range(len(self.input)):
-            self.deltaArr[0].append(self.rate * self.hiddenArr[2] * self.input[j])
+        for j in range(len(perceptron)):
+            deltaArr[0].append(self.rate * self.hiddenArr[2] * perceptron[j])
 
-        for k in range(len(self.input)):
-            self.deltaArr[1].append(self.rate * self.hiddenArr[3] * self.input[k])
+        for k in range(len(perceptron)):
+            deltaArr[1].append(self.rate * self.hiddenArr[3] * perceptron[k])
 
-        for l in range(len(self.input)):
-            self.deltaArr[2].append(self.rate * self.hiddenArr[4] * self.input[l])
+        for l in range(len(perceptron)):
+            deltaArr[2].append(self.rate * self.hiddenArr[4] * perceptron[l])
             
         for m in range(len(self.sigmoidArr)):
-            self.deltaArr[3].append(self.rate * self.hiddenArr[0] * self.sigmoidArr[m])
+            deltaArr[3].append(self.rate * self.hiddenArr[0] * self.sigmoidArr[m])
 
         for n in range(len(self.sigmoidArr)):
-            self.deltaArr[4].append(self.rate * self.hiddenArr[1] * self.sigmoidArr[n])
+            deltaArr[4].append(self.rate * self.hiddenArr[1] * self.sigmoidArr[n])
+
+        self.sigmoidArr.clear()
+        self.hiddenArr.clear()
 
         #   update weights
-        self.weights = [[x + y for x, y in zip(subLstA, subLstB)] for subLstA, subLstB in zip(self.weights, self.deltaArr)]
+        self.weights = [[x + y for x, y in zip(subLstA, subLstB)] for subLstA, subLstB in zip(self.weights, deltaArr)]
 
-        #   printing weights
-        """
-        print("Delta")
-        for x in self.deltaArr:
-            print(" ".join(map(str, x))) 
-        """
+        deltaArr.clear()
 
+        #   printing updated weights
         for x in self.weights:
             print(" ".join(map(str, x)))
 

@@ -21,18 +21,16 @@ weights = [[0.74, 0.8, 0.35, 0.9], [0.13, 0.4, 0.97, 0.45], [0.68, 0.10, 0.96, 0
 
 bias = [1]
 
-netArr = []
-
 " MAIN "
 
-_ann = ann.Network(inputs, weights, bias, target)
+_ann = ann.Network(weights, target)
 #_ann.forward()
 #_ann.back()
 
-for i in range(5):
+for i in range(2):
     print(f"Step: {i}")
-    _ann.forward()
-    _ann.back()
+    _ann.forward(inputs, bias)
+    _ann.back(inputs)
 
 
 

@@ -14,7 +14,6 @@ class NetworkTest:
         self.netArr2 = []
         self.sigmoidArr = []
         self.hiddenError = []
-        self.deltaArr = [[], [], [], []]
         self.outputArr = []
         self.softmaxArr = []
 
@@ -28,13 +27,13 @@ class NetworkTest:
             for tempInput, tempWeight in zip(perceptron, neuron_weights):
                 net += tempInput * tempWeight
             self.netArr.append(net)
-        print(f"net 3, 4: {self.netArr}")
+        #print(f"Net 3, 4: {self.netArr} \n")
 
         #   activation function [sigmoid]
         for tempNet in range(len(self.netArr)):
             self.sigmoidArr.append(self.sigmoid(self.netArr[tempNet]))
         self.sigmoidArr.extend(bias)
-        #print(self.sigmoidArr)
+        #print(f"Sigmoid 3, 4: {self.sigmoidArr} \n")
 
         #   second
         for neuron_weights in self.weights[2:]:
@@ -42,45 +41,50 @@ class NetworkTest:
             for tempWeight, weight in zip(self.sigmoidArr, neuron_weights):
                 net += tempWeight * weight
             self.netArr2.append(net)
-        #print(self.netArr2)
+        print(f"Net 5, 6: {self.netArr2} \n")
 
         self.netArr.clear()
 
         return self.netArr2
 
     def backward(self, perceptron):
-        for i in range(len(self.target)):
+        deltaArr = [[], [], [], []]
+
+        for i in range(len(self.netArr2)):
             self.hiddenError.append(self.target[i] - self.netArr2[i])
 
         self.netArr2.clear()
 
         tempA = self.sigmoidArr[0] * ( 1 - self.sigmoidArr[0]) * ((self.weights[2][0] * self.hiddenError[0]) + (self.weights[3][0] * self.hiddenError[1]))
         self.hiddenError.append(tempA)
-        #print(f"temp: {self.hiddenError}")
+        print(f"Output errors: {self.hiddenError} \n")
 
         tempB = self.sigmoidArr[1] * ( 1 - self.sigmoidArr[1]) * ((self.weights[2][1] * self.hiddenError[0]) + (self.weights[3][1] * self.hiddenError[1]))
         self.hiddenError.append(tempB)
-        #print(f"Hidden errors: {self.hiddenError}")   
+        print(f"Hidden errors: {self.hiddenError} \n")   
 
         for i in range(len(perceptron)):
-            self.deltaArr[0].append(self.rate * self.hiddenError[2] * perceptron[i])
+            deltaArr[0].append(self.rate * self.hiddenError[2] * perceptron[i])
 
         for i in range(len(perceptron)):
-            self.deltaArr[1].append(self.rate * self.hiddenError[3] * perceptron[i])
+            deltaArr[1].append(self.rate * self.hiddenError[3] * perceptron[i])
 
         for i in range(len(self.sigmoidArr)):
-            self.deltaArr[2].append(self.rate * self.hiddenError[0] * self.sigmoidArr[i])
+            deltaArr[2].append(self.rate * self.hiddenError[0] * self.sigmoidArr[i])
 
         for i in range(len(self.sigmoidArr)):
-            self.deltaArr[3].append(self.rate * self.hiddenError[1] * self.sigmoidArr[i])
-        #print(self.deltaArr)
+            deltaArr[3].append(self.rate * self.hiddenError[1] * self.sigmoidArr[i])
+        #print(f"Delta: {deltaArr} \n")
 
         self.sigmoidArr.clear()
+        self.hiddenError.clear()
 
         #   update weights
         #   psuedo code: weights[i] + deltaArr[i]
         #   works
-        self.weights = [[x + y for x, y in zip(subListA, subListB)] for subListA, subListB in zip(self.weights, self.deltaArr)]
+        self.weights = [[x + y for x, y in zip(subListA, subListB)] for subListA, subListB in zip(self.weights, deltaArr)]
+
+        deltaArr.clear()
 
         #print(self.weights)
         
@@ -105,17 +109,12 @@ class NetworkTest:
 
 #   inputs
 inputs = [0, 1, 1]
+#   bias
 bias = [1]
 #   weights [2d]
 weights = [[0.5, -0.2, 0.5], [0.1, 0.2, 0.3], [0.7, 0.6, 0.2], [0.9, 0.8, 0.4]]
 #   desired output
 desired_output = [1, 0]
-
-#   training
-
-#   softmax function...?
-
-#   output errors then hidden errors in layer 1
 
 #forwardStep()
 #backwardStep()
@@ -126,14 +125,12 @@ network = NetworkTest(weights, desired_output)
 #network.backward()
 #network.training()
 
-for i in range(5):
-    pass
-
 #network.forward(inputs, bias)
 
-for i in range(10):
-    print(i)
+for i in range(2):
+    print(f"Step: {i}")
     network.forward(inputs, bias)
+    print("\n")
     network.backward(inputs)
 #network.training()
 
