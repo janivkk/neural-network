@@ -44,7 +44,7 @@ class MLP_Network:
     #   The Algorithm
 
     #   forward step propagation
-    def forward(self, perceptron, bias = [1]):
+    def forward(self, perceptron, bias):
         #   add list to list -> input + bias
         perceptron.extend(bias)
 
@@ -121,6 +121,9 @@ class MLP_Network:
         self.weights = [[x + y for x, y in zip(subLstA, subLstB)] for subLstA, subLstB in zip(self.weights, deltaArr)]
 
         deltaArr.clear()
+
+        #perceptron.clear()
+        del perceptron[-1]  #   deletes bias to clear arr
 
         #   printing updated weights
         print("\nNEW [BIAS 'END']:")

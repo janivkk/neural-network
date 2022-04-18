@@ -27,34 +27,64 @@ bias = [1]
 network = mlp_network.MLP_Network(weights, output)
 
 #   work on it
-#network.forward(inputs[0], bias)
-#network.back(inputs[0], target[0])
+""" print(inputs[0])
+network.forward(inputs[0], bias)
+network.back(inputs[0], target[0])
+print(inputs[1])
+network.forward(inputs[1], bias)
+network.back(inputs[1], target[0])
+print(inputs[2])
+network.forward(inputs[2], bias) """
 #network.squareEr(target[0], output)
 
-def run():
+def main():
     print("Backpropagation Algorithm (ID: 25085325) => Neural Networks")
 
+    step = 10
+
     #   Epoch
-    for i in range(10):
+    for i in range(step):
         print(f"\nEpoch: {i} || Target: {target[0]}")
 
         #   Steps
-        for j in range(10):
-            print(f"\nStep: {j}") 
+        for j in range(step):
+            print(f"\nStep: {j} || Dataset: {inputs[0]}") 
             network.forward(inputs[0], bias)
             network.back(inputs[0], target[0])
         
-        for k in range(10):
-            print(f"\nStep: {k}")
+        for k in range(step):
+            print(f"\nStep: {k} || Dataset: {inputs[1]}")
             network.forward(inputs[1], bias)
             network.back(inputs[1], target[0])
+
+        for index in range(step):
+            print(f"Step {index} || Dataset: {inputs[2]}")
+            network.forward(inputs[2], bias)
+            network.back(inputs[2], target[0])
+
+        print(f"\nEpoch: {i} || Target: {target[1]}")
+        
+        for index in range(step):
+            print(f"Step {index} || Dataset: {inputs[3]}")
+            network.forward(inputs[3], bias)
+            network.back(inputs[3], target[1])
+
+        for index in range(step):
+            print(f"Step {index} || Dataset: {inputs[4]}")
+            network.forward(inputs[4], bias)
+            network.back(inputs[4], target[1])
+
+        for index in range(step):
+            print(f"Step {index} || Dataset: {inputs[5]}")
+            network.forward(inputs[5], bias)
+            network.back(inputs[5], target[1])    
 
     print("Probability Distribution [Y] of 0.3, 0.7 & 0.9")
     network.forward(unseen, bias)
 
     network.softmax(output)
 
-run()
+main()
 
 
 
