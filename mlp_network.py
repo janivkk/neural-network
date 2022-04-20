@@ -26,7 +26,9 @@ class MLP_Network:
         self.sigmoidArr = []    #   second
         self.softmaxArr = []    #   softmax / probability distribution
         self.errArr = []   #   sqr error array
+        self.logged_error = []
         self.total = 0
+        #self.testArr = []
 
     #   sigmoid function with return type
     def sigmoid(self, n):
@@ -39,13 +41,7 @@ class MLP_Network:
 
         print(f"Probaility Distribution: {self.softmaxArr}")
 
-        return self.softmaxArr
-
-    #   calculate mean square error
-    def getErr(self):
-        x = [i ** 2 for i in self.errArr]
-        y = sum(x)
-        self.total = y / len(self.errArr)     
+        return self.softmaxArr    
 
     #   The Algorithm
 
@@ -83,11 +79,17 @@ class MLP_Network:
             self.output.append(net)
         print(f"[A7, A8]: {self.output}")
 
-        self.sqrErr.append(self.output)
-
         self.netArr.clear()
 
         return self.output
+
+    #   calculate mean square error
+    def getErr(self):
+        x = [i ** 2 for i in self.errArr]
+        y = sum(x)
+        self.total = y / len(self.errArr)
+        #self.testArr.append(self.total)
+        #print(self.total) 
 
     #   backward step propagation & update weights
     def back(self, perceptron, target):
@@ -156,4 +158,61 @@ class MLP_Network:
         ax.plot(x_data, y_data, 'tab:green')
         plt.show()
 
+    def training(self, inputs, unseen, bias, target, output):
+        epoch = int(input("Amount of Epochs:"))
+        step = int(input("Amount of Steps:"))
+
+        i = 0
+
+        for i in range(epoch):
+            print(f"\nEpoch :: {i} || Target :: {target[0]}")
+
+            #   Steps
+            for j in range(step):
+                print(f"\nStep: {j} || Dataset: {inputs[0]}") 
+                self.forward(inputs[0], bias)
+                self.back(inputs[0], target[0])
+            self.getErr()
+            
+            for k in range(step):
+                print(f"\nStep: {k} || Dataset: {inputs[1]}")
+                self.forward(inputs[1], bias)
+                self.back(inputs[1], target[0])
+            self.getErr()
+
+            for index in range(step):
+                print(f"Step {index} || Dataset: {inputs[2]}")
+                self.forward(inputs[2], bias)
+                self.back(inputs[2], target[0])
+            self.getErr()
+
+            print(f"\nEpoch: {i} || Target: {target[1]}")
+            
+            for index in range(step):
+                print(f"Step {index} || Dataset: {inputs[3]}")
+                self.forward(inputs[3], bias)
+                self.back(inputs[3], target[1])
+            self.getErr()
+
+            for index in range(step):
+                print(f"Step {index} || Dataset: {inputs[4]}")
+                self.forward(inputs[4], bias)
+                self.back(inputs[4], target[1])
+            self.getErr()
+
+            for index in range(step):
+                print(f"Step {index} || Dataset: {inputs[5]}")
+                self.forward(inputs[5], bias)
+                self.back(inputs[5], target[1])    
+            self.getErr()
+
+            self.logged_error.append([i, self.total])
+
+        self.forward(unseen, bias)
+
+        self.getErr()
+
+        self.plotLearningCurve()
+
+        self.softmax(output)
 #   END
