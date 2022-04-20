@@ -28,7 +28,6 @@ class MLP_Network:
         self.errArr = []   #   sqr error array
         self.logged_error = []
         self.total = 0
-        #self.testArr = []
 
     #   sigmoid function with return type
     def sigmoid(self, n):
@@ -42,8 +41,6 @@ class MLP_Network:
         print(f"Probaility Distribution: {self.softmaxArr}")
 
         return self.softmaxArr    
-
-    #   The Algorithm
 
     #   forward step propagation
     def forward(self, perceptron, bias):
@@ -85,11 +82,10 @@ class MLP_Network:
 
     #   calculate mean square error
     def getErr(self):
-        x = [i ** 2 for i in self.errArr]
-        y = sum(x)
+        lst = [i ** 2 for i in self.errArr]   #   lst = []
+        y = sum(lst)
         self.total = y / len(self.errArr)
-        #self.testArr.append(self.total)
-        #print(self.total) 
+        return self.total
 
     #   backward step propagation & update weights
     def back(self, perceptron, target):
@@ -100,6 +96,7 @@ class MLP_Network:
         #   output errors -> calculating errors
         for i in range(len(self.output)):
             self.hiddenArr.append(target[i] - self.output[i])
+            #arr.append(target[i] - self.output[i])
             self.errArr.append(target[i] - self.output[i])
         print(f"OUTPUT ERRORS: {self.hiddenArr}")
 
@@ -164,6 +161,7 @@ class MLP_Network:
 
         i = 0
 
+        #   Epochs
         for i in range(epoch):
             print(f"\nEpoch :: {i} || Target :: {target[0]}")
 
@@ -172,19 +170,16 @@ class MLP_Network:
                 print(f"\nStep: {j} || Dataset: {inputs[0]}") 
                 self.forward(inputs[0], bias)
                 self.back(inputs[0], target[0])
-            self.getErr()
             
             for k in range(step):
                 print(f"\nStep: {k} || Dataset: {inputs[1]}")
                 self.forward(inputs[1], bias)
                 self.back(inputs[1], target[0])
-            self.getErr()
 
             for index in range(step):
                 print(f"Step {index} || Dataset: {inputs[2]}")
                 self.forward(inputs[2], bias)
                 self.back(inputs[2], target[0])
-            self.getErr()
 
             print(f"\nEpoch: {i} || Target: {target[1]}")
             
@@ -192,27 +187,26 @@ class MLP_Network:
                 print(f"Step {index} || Dataset: {inputs[3]}")
                 self.forward(inputs[3], bias)
                 self.back(inputs[3], target[1])
-            self.getErr()
 
             for index in range(step):
                 print(f"Step {index} || Dataset: {inputs[4]}")
                 self.forward(inputs[4], bias)
                 self.back(inputs[4], target[1])
-            self.getErr()
 
             for index in range(step):
                 print(f"Step {index} || Dataset: {inputs[5]}")
                 self.forward(inputs[5], bias)
-                self.back(inputs[5], target[1])    
-            self.getErr()
+                self.back(inputs[5], target[1])
+
+            #   calculat mean
+            x = [y ** 2 for y in self.errArr]
+            z = sum(x)
+            self.total = z / len(self.errArr)
 
             self.logged_error.append([i, self.total])
 
         self.forward(unseen, bias)
 
-        self.getErr()
+        self.softmax(output)
 
         self.plotLearningCurve()
-
-        self.softmax(output)
-#   END
