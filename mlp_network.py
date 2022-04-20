@@ -1,6 +1,8 @@
 " LIBRARIES "
 import math
 
+import matplotlib.pyplot as plt
+
 """ 
     Artificial Neural Network
 
@@ -15,7 +17,7 @@ import math
 
 class MLP_Network:
     #   initialiser [constructor]
-    def __init__(self, w, o, sqrArr):
+    def __init__(self, w, o):
         self.weights = w
         self.output = o     #   second
         self.lr = 0.1     #   learning rate
@@ -23,7 +25,8 @@ class MLP_Network:
         self.netArr = []    #   first 
         self.sigmoidArr = []    #   second
         self.softmaxArr = []    #   softmax / probability distribution
-        self.sqrErr = sqrArr    #   sqr error array
+        self.errArr = []   #   sqr error array
+        self.total = 0
 
     #   sigmoid function with return type
     def sigmoid(self, n):
@@ -39,9 +42,10 @@ class MLP_Network:
         return self.softmaxArr
 
     #   calculate mean square error
-    def cal_sqrErr(self, output):
-        print(f"Squared Error:\n{self.sqrErr}")
-        pass     
+    def getErr(self):
+        x = [i ** 2 for i in self.errArr]
+        y = sum(x)
+        self.total = y / len(self.errArr)     
 
     #   The Algorithm
 
@@ -94,6 +98,7 @@ class MLP_Network:
         #   output errors -> calculating errors
         for i in range(len(self.output)):
             self.hiddenArr.append(target[i] - self.output[i])
+            self.errArr.append(target[i] - self.output[i])
         print(f"OUTPUT ERRORS: {self.hiddenArr}")
 
         self.output.clear()
@@ -139,5 +144,16 @@ class MLP_Network:
             print(" ".join(map(str, x)))
 
         return self.weights
+
+    def plotLearningCurve(self):
+        x_data = []
+        y_data = []
+        x_data.extend([self.logged_error[i][0] for i in range(0, len(self.logged_error))])
+        y_data.extend([self.logged_error[i][1] for i in range(0, len(self.logged_error))])
+        fig, ax = plt.subplots()
+        fig.suptitle("Mean Squared Error")
+        ax.set(xlabel = 'Epoch', ylabel = 'Squared Error')
+        ax.plot(x_data, y_data, 'tab:green')
+        plt.show()
 
 #   END

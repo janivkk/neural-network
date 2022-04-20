@@ -16,9 +16,11 @@ class NetworkTest:
         self.sigmoidArr = []
         self.hiddenErr = []
         self.softmaxArr = []
-        self.outputErr = [] #   output errors
-        self.meanArr = []
         self.logged_error = []
+
+        #   test
+        self.errArr = []
+        self.total = 0
 
     def sigmoid(self, n):
         return 1 / (1 + math.exp(-n))
@@ -58,18 +60,11 @@ class NetworkTest:
 
         return self.output
 
-    def meanErr(self):
-        for i in range(len(self.output)):
-            temp = (self.target[i]**2) - (self.output[i]**2)
-            sqrTemp = pow(temp, 2)
-            self.outputErr(sqrTemp)
-
-        #self.output.clear()
-
-        temp = 0
-        for j in range(len(self.outputErr)):
-            temp += self.outputErr[j] / 2
-        self.meanArr.append(temp)
+    def getErr(self):
+        x = [i ** 2 for i in self.errArr]
+        y = sum(x)
+        self.total = y / len(self.errArr)
+        print(self.total)
 
     def backward(self, perceptron):
         deltaArr = [[], [], [], []]
@@ -77,8 +72,8 @@ class NetworkTest:
         #   6, 7
         for i in range(len(self.output)):
             self.hiddenErr.append(self.target[i] - self.output[i])
-            #self.outputErr.append(((self.target[i] - self.output[i]) ** 2) / 2)
-        #print(self.outputErr)
+            self.errArr.append(self.target[i] - self.output[i])
+        #print(self.hiddenErr)
 
         self.output.clear()
 
@@ -102,9 +97,6 @@ class NetworkTest:
         for i in range(len(self.sigmoidArr)):
             deltaArr[3].append(self.rate * self.hiddenErr[1] * self.sigmoidArr[i])
         #print(f"Delta: {deltaArr} \n")
-
-        sqrArr.append(self.hiddenErr[0])
-        sqrArr.append(self.hiddenErr[1])
 
         self.sigmoidArr.clear()
         self.hiddenErr.clear()
@@ -141,16 +133,16 @@ class NetworkTest:
                 print(f"Step :: {j}")
                 self.forward(perceptron, bias)
                 self.backward(perceptron)
-            self.meanErr()
+            self.getErr()
 
-            self.logged_error.append([i, self.meanArr])
-        
-        self.plotLearningCurve("Mean Squarred Error per Epoch")
+            self.logged_error.append([i, self.total])
 
         self.forward(unseen, bias)
 
         self.softmax(output)
-
+        
+        self.plotLearningCurve("Mean Squarred Error per Epoch")
+        
 #   inputs
 inputs = [0, 1, 1]
 unseen = [0.4, 0.7, 1]
