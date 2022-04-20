@@ -15,7 +15,7 @@ import math
 
 class MLP_Network:
     #   initialiser [constructor]
-    def __init__(self, w, o):
+    def __init__(self, w, o, sqrArr):
         self.weights = w
         self.output = o     #   second
         self.lr = 0.1     #   learning rate
@@ -23,6 +23,7 @@ class MLP_Network:
         self.netArr = []    #   first 
         self.sigmoidArr = []    #   second
         self.softmaxArr = []    #   softmax / probability distribution
+        self.sqrErr = sqrArr    #   sqr error array
 
     #   sigmoid function with return type
     def sigmoid(self, n):
@@ -38,8 +39,9 @@ class MLP_Network:
         return self.softmaxArr
 
     #   calculate mean square error
-    def squareEr(self, target, output):
-        pass        
+    def cal_sqrErr(self, output):
+        print(f"Squared Error:\n{self.sqrErr}")
+        pass     
 
     #   The Algorithm
 
@@ -47,6 +49,8 @@ class MLP_Network:
     def forward(self, perceptron, bias):
         #   add list to list -> input + bias
         perceptron.extend(bias)
+
+        print(f"\nForward Step: Input + Bias => {perceptron}\n")
 
         #   show old weights
         print("\nOLD [BIAS 'END']:")
@@ -75,6 +79,8 @@ class MLP_Network:
             self.output.append(net)
         print(f"[A7, A8]: {self.output}")
 
+        self.sqrErr.append(self.output)
+
         self.netArr.clear()
 
         return self.output
@@ -82,6 +88,8 @@ class MLP_Network:
     #   backward step propagation & update weights
     def back(self, perceptron, target):
         deltaArr = [[], [], [], [], []]  #  delta arr
+
+        print(f"\nBackward Step: Input + Bias => {perceptron}\n")
 
         #   output errors -> calculating errors
         for i in range(len(self.output)):

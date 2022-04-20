@@ -29,10 +29,10 @@ network = mlp_network.MLP_Network(weights, output)
 #   work on it
 """ print(inputs[0])
 network.forward(inputs[0], bias)
-network.back(inputs[0], target[0])
+network.back(inputs[0], target[0], bias)
 print(inputs[1])
 network.forward(inputs[1], bias)
-network.back(inputs[1], target[0])
+network.back(inputs[1], target[0], bias)
 print(inputs[2])
 network.forward(inputs[2], bias) """
 #network.squareEr(target[0], output)
@@ -40,10 +40,11 @@ network.forward(inputs[2], bias) """
 def main():
     print("Backpropagation Algorithm (ID: 25085325) => Neural Networks")
 
-    step = 10
+    epoch = 1
+    step = 1
 
     #   Epoch
-    for i in range(step):
+    for i in range(epoch):
         print(f"\nEpoch: {i} || Target: {target[0]}")
 
         #   Steps
