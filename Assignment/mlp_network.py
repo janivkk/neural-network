@@ -198,7 +198,7 @@ class MLP_Network:
                 self.forward(inputs[5], bias)
                 self.back(inputs[5], target[1])
 
-            #   calculat mean
+            #   calculate mean
             x = [y ** 2 for y in self.errArr]
             z = sum(x)
             self.total = z / len(self.errArr)
